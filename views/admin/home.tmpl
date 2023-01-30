@@ -1,0 +1,18 @@
+{{ template "header" . }}
+<div class="all_posts">
+  <h1> Admin Page </h1>
+  {{ range .Articles }}
+    <div class="post">
+      <h2><a href="article/{{ .Id }}">{{ .Title }}</a></h2>
+      <div class="post_date">{{ .CreatedAt.Format "January 2, 2006" }}</div>
+      <div class="post_content">{{ .Description }}</div>
+    </div>
+  {{ end }}
+  <div class="post">
+    <h2><a href="article/create">New Article</a></h2>
+  </div>
+  <div class="post">
+    <h2><a href="/admin/logout">Logout</a></h2>
+  </div>
+</div>
+{{ template "footer" . }}

@@ -11,7 +11,7 @@ func AuthCheckMiddleware() gin.HandlerFunc {
 		userId := session.Get("user_id")
 
 		if userId == nil {
-			c.HTML(401, "404.html", gin.H{})
+			c.HTML(401, "404.tmpl", gin.H{})
 			c.Abort()
 			return
 		}

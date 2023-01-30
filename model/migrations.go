@@ -6,6 +6,7 @@ import (
 
 func Migrate() error {
 	var models = []interface{}{
+		&User{},
 		&Article{},
 	}
 	return db.Debug().AutoMigrate(models...)

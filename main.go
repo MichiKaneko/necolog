@@ -15,7 +15,12 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, World!")
+	r := Router()
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	r.Run(fmt.Sprintf(":%s", port))
 }
 
 func init() {
@@ -33,6 +38,12 @@ func init() {
 	if err != nil {
 		log.Fatal("Error migrating database")
 	}
+
+	err = model.Seed()
+	if err != nil {
+		log.Fatal("Error seeding database")
+	}
+
 }
 
 func Router() *gin.Engine {
@@ -43,6 +54,8 @@ func Router() *gin.Engine {
 	secret := os.Getenv("SECRET")
 	store := cookie.NewStore([]byte(secret))
 	r.Use(sessions.Sessions("necolog_admin", store))
+
+	r.LoadHTMLGlob("views/**/*")
 
 	r.Static("/static", "./static")
 
@@ -60,6 +73,9 @@ func Router() *gin.Engine {
 	admin := r.Group("/admin")
 	admin.Use(middleware.AuthCheckMiddleware())
 	{
+		admin.GET("/", controller.AdminIndex)
+		admin.GET("/logout", controller.Logout)
+
 		admin_article := admin.Group("/article")
 		{
 			admin_article.GET("/", controller.GetArticles)

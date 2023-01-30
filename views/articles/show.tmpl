@@ -1,0 +1,9 @@
+{{ template "header" . }}
+<div class="all_posts">
+    <div class="post">
+      <h2><a href="article/{{ .Id }}">{{ .Title }}</a></h2>
+      <div class="post_date">{{ .CreatedAt.Format "January 2, 2006" }}</div>
+      <div class="post_content">{{ .Body }}</div>
+    </div>
+</div>
+{{ template "footer" . }}

@@ -2,21 +2,24 @@ package model
 
 import (
 	"necolog/db"
+
+	"gorm.io/gorm"
 )
 
 type Article struct {
-	Id          int
-	Title       string
-	Description string
-	Body        string
-	Image       string
+	gorm.Model
+	Id          int    `gorm:"primaryKey"`
+	Title       string `gorm:"not null" json:"title"`
+	Description string `json:"description"`
+	Body        string `json:"body"`
+	Image       string `json:"image"`
 }
 
 func (a *Article) TableName() string {
 	return "articles"
 }
 
-func (a *Article) Create() (error) {
+func (a *Article) Create() error {
 	err := db.Debug().Model(&Article{}).Create(&a).Error
 	if err != nil {
 		return err
@@ -24,7 +27,7 @@ func (a *Article) Create() (error) {
 	return nil
 }
 
-func (a *Article) Update() (error) {
+func (a *Article) Update() error {
 	err := db.Debug().Model(&Article{}).Updates(&a).Error
 	if err != nil {
 		return err
@@ -32,7 +35,7 @@ func (a *Article) Update() (error) {
 	return nil
 }
 
-func (a *Article) Delete() (error) {
+func (a *Article) Delete() error {
 	err := db.Debug().Model(&Article{}).Delete(&a).Error
 	if err != nil {
 		return err

@@ -9,8 +9,8 @@ import (
 func Index(c *gin.Context) {
 	articles, err := model.GetArticles()
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.HTML(500, "500.tmpl", gin.H{})
 		return
 	}
-	c.JSON(200, articles)
+	c.HTML(200, "index.tmpl", gin.H{"articles": articles})
 }

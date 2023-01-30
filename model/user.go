@@ -4,12 +4,14 @@ import (
 	"necolog/db"
 
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	Id       int
-	Email    string
-	Password string
+	gorm.Model
+	Id       int    `gorm:"primaryKey"`
+	Email    string `gorm:"not null;unique" json:"email"`
+	Password string `gorm:"not null" json:"password"`
 }
 
 func (u *User) TableName() string {
@@ -26,6 +28,7 @@ func findUserByEmail(email string) (User, error) {
 }
 
 func (u *User) Create() error {
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
