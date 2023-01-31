@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/gomarkdown/markdown"
 )
 
 func GetArticles(c *gin.Context) {
@@ -19,10 +20,10 @@ func GetArticles(c *gin.Context) {
 	userId := session.Get("user_id")
 
 	if userId != nil {
-		c.HTML(200, "articles/index.tmpl", gin.H{"articles": articles, "user_id": userId})
+		c.HTML(200, "index.tmpl", gin.H{"articles": articles, "user_id": userId})
 		return
 	}
-	c.HTML(200, "articles/index.tmpl", gin.H{"articles": articles})
+	c.HTML(200, "index.tmpl", gin.H{"articles": articles})
 }
 
 func GetArticle(c *gin.Context) {
@@ -39,14 +40,16 @@ func GetArticle(c *gin.Context) {
 		return
 	}
 
+	templateBody := string(markdown.ToHTML([]byte(article.Body), nil, nil))
+
 	session := sessions.Default(c)
 	userId := session.Get("user_id")
 
 	if userId != nil {
-		c.HTML(200, "articles/show.tmpl", gin.H{"article": article, "user_id": userId})
+		c.HTML(200, "show.tmpl", gin.H{"article": article, "body": templateBody, "user_id": userId})
 		return
 	}
-	c.HTML(200, "articles/show.tmpl", gin.H{"article": article})
+	c.HTML(200, "show.tmpl", gin.H{"article": article, "body": templateBody})
 }
 
 func CreateArticlePage(c *gin.Context) {
@@ -61,7 +64,7 @@ func CreateArticle(c *gin.Context) {
 	err := article.Create()
 
 	if err != nil {
-		c.HTML(302, "articles/new.tmpl", gin.H{
+		c.HTML(302, "new.tmpl", gin.H{
 			"error":   err.Error(),
 			"article": article,
 		})

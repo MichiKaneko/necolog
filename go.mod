@@ -28,6 +28,7 @@ require (
 require (
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/gomarkdown/markdown v0.0.0-20221013030248-663e2500819c
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/joho/godotenv v1.4.0
