@@ -3,7 +3,7 @@
     <div class="post">
       <h2><a href="article/{{ .article.Id }}">{{ .article.Title }}</a></h2>
       <div class="post_date">{{ .article.CreatedAt.Format "January 2, 2006" }}</div>
-      <div class="post_content">{{ .body }}</div>
+      <div class="post_content">{{ template "body" .}}</div>
     </div>
 </div>
 {{ template "footer" . }}

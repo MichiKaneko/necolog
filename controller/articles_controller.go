@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"html/template"
 	"necolog/model"
 	"strconv"
 
@@ -40,16 +41,17 @@ func GetArticle(c *gin.Context) {
 		return
 	}
 
-	templateBody := string(markdown.ToHTML([]byte(article.Body), nil, nil))
+	md := []byte(article.Body)
+	body := markdown.ToHTML(md, nil, nil)
 
 	session := sessions.Default(c)
 	userId := session.Get("user_id")
 
 	if userId != nil {
-		c.HTML(200, "show.tmpl", gin.H{"article": article, "body": templateBody, "user_id": userId})
+		c.HTML(200, "show.tmpl", gin.H{"article": article, "body": template.HTML(body), "user_id": userId})
 		return
 	}
-	c.HTML(200, "show.tmpl", gin.H{"article": article, "body": templateBody})
+	c.HTML(200, "show.tmpl", gin.H{"article": article, "body": template.HTML(body)})
 }
 
 func CreateArticlePage(c *gin.Context) {
